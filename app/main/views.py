@@ -24,7 +24,7 @@ def index():
 def professores():
     form = ProfessorForm()
     if form.validate_on_submit():
-        db.session.add(Professor(nome=form.name.data.strip(),
+        db.session.add(Professor(nome=form.name.data,
                                  disciplina=_disciplina_por_nome(form.role.data)))
         db.session.commit()
         flash('Professor cadastrado com sucesso!')
@@ -37,7 +37,7 @@ def professores():
 def disciplinas():
     form = DisciplinaForm()
     if form.validate_on_submit():
-        db.session.add(Disciplina(nome=form.name.data.strip(), semestre=form.semester.data))
+        db.session.add(Disciplina(nome=form.name.data, semestre=form.semester.data))
         db.session.commit()
         flash('Disciplina cadastrada com sucesso!')
         return redirect(url_for('.disciplinas'))
@@ -49,10 +49,10 @@ def disciplinas():
 def alunos():
     form = AlunoForm()
     if form.validate_on_submit():
-        db.session.add(Aluno(nome=form.name.data.strip(),
+        db.session.add(Aluno(nome=form.name.data,
                              disciplina=_disciplina_por_nome(form.role.data)))
         db.session.commit()
-        flash('Aluno cadastrado com sucesso!')
+        flash('Estudante cadastrado com sucesso!')
         return redirect(url_for('.alunos'))
     lista = Aluno.query.order_by(Aluno.id).all()
     return render_template('alunos.html', form=form, alunos=lista)
@@ -62,8 +62,8 @@ def alunos():
 def cursos():
     form = CursoForm()
     if form.validate_on_submit():
-        db.session.add(Curso(nome=form.coursename.data.strip(),
-                             descricao=form.coursedescription.data.strip()))
+        db.session.add(Curso(nome=form.coursename.data,
+                             descricao=form.coursedescription.data))
         db.session.commit()
         flash('Curso cadastrado com sucesso!')
         return redirect(url_for('.cursos'))
