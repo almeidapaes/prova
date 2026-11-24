@@ -19,9 +19,10 @@ def index():
 @main.route('/professores', methods=['GET', 'POST'])
 def professores():
     form = ProfessorForm()
-    form.disciplina.choices = [(d.id, d.nome) for d in Disciplina.query.order_by(Disciplina.id).all()]
+    form.role.choices = [(d.nome, d.nome) for d in Disciplina.query.order_by(Disciplina.id).all()]
     if form.validate_on_submit():
-        professor = Professor(nome=form.nome.data.strip(), disciplina_id=form.disciplina.data)
+        disciplina = Disciplina.query.filter_by(nome=form.role.data).first()
+        professor = Professor(nome=form.name.data.strip(), disciplina=disciplina)
         db.session.add(professor)
         db.session.commit()
         flash('Professor cadastrado com sucesso!')
@@ -31,9 +32,9 @@ def professores():
 
 
 # Módulos não desenvolvidos: exibem apenas "Não disponível".
-@main.route('/disciplinas')
-@main.route('/alunos')
-@main.route('/cursos')
-@main.route('/ocorrencias')
+@main.route('/disciplinas', methods=['GET', 'POST'])
+@main.route('/alunos', methods=['GET', 'POST'])
+@main.route('/cursos', methods=['GET', 'POST'])
+@main.route('/ocorrencias', methods=['GET', 'POST'])
 def nao_disponivel():
     return render_template('nao_disponivel.html', current_time=datetime.now(timezone.utc))
